@@ -3,9 +3,9 @@ CMD=\
 "git clone --bare /mnt ./.git
 git config --unset core.bare
 git reset --hard HEAD
-cabal new-install pandoc $CABAL_OPTS
-cabal new-build --jobs exe:pandoc-crossref $CABAL_OPTS
-find dist-newstyle -type f -perm +100 -name pandoc-crossref -exec cp {} ./ \;
+[ \"$TRAVIS_BRANCH\" = \"pandoc_master\" ] && git clone --depth=1 https://github.com/jgm/pandoc.git
+cabal new-install exe:pandoc exe:pandoc-crossref $CABAL_OPTS --overwrite-policy=always
+cp \"\$(realpath \"/root/.cabal/bin/pandoc-crossref\")\" ./
 if [ -n \"$RUN_UPX\" ]; then
   upx --best pandoc-crossref
 fi

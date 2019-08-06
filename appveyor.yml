@@ -13,12 +13,13 @@ environment:
     GHC_MINOR_VERSION: "8.4.4"
     GHC: "C:\\ProgramData\\chocolatey\\lib\\ghc\\tools\\ghc-%GHC_MINOR_VERSION%\\bin\\ghc.exe"
     CABAL_VERSION: "2.4.1.0"
-    CABAL_OPTS: "--constraint pandoc==%PANDOC_VERSION% --enable-executable-stripping --enable-split-sections"
+    CABAL_CONSTRAINT: "--constraint pandoc==%PANDOC_VERSION%"
+    CABAL_OPTS: "%CABAL_CONSTRAINT% --enable-executable-stripping --enable-split-sections"
     GHC_OPTS: ""
     ARCH: "x64"
     CHOCO_OPTS: ""
   matrix:
-  - PANDOC_VERSION: "2.7.3"
+  - PANDOC_VERSION: "2.8"
 
 skip_commits:
   files:
@@ -43,8 +44,6 @@ build: off
 install:
   - choco install ghc --version %GHC_VERSION% --ignore-dependencies %CHOCO_OPTS%
   - choco install cabal --version %CABAL_VERSION% --ignore-dependencies %CHOCO_OPTS%
-
-# before_test:
 
 test_script:
   - echo %CABAL_OPTS%
@@ -75,3 +74,18 @@ deploy:
   draft: true
   on:
     appveyor_repo_tag: true        # deploy on tag push only
+
+for:
+-
+  branches:
+    only:
+      - pandoc_master
+
+  environment:
+    global:
+      CABAL_CONSTRAINT: ""
+      PANDOC_VERSION: "master"
+
+  before_test:
+    # get pandoc master
+    - git clone --depth=1 https://github.com/jgm/pandoc.git

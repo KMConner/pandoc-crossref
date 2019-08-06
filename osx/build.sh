@@ -1,11 +1,12 @@
 #!/bin/bash
 
+[ "$TRAVIS_BRANCH" = "pandoc_master" ] && git clone --depth=1 https://github.com/jgm/pandoc.git
+
 export PANDOC="$HOME/.cabal/bin/pandoc"
-rm "$PANDOC" || true
+export PANDOC_CROSSREF="$HOME/.cabal/bin/pandoc-crossref"
 cabal new-update
-cabal new-install pandoc $CABAL_OPTS
-cabal new-build exe:pandoc-crossref $CABAL_OPTS
-find dist-newstyle -type f -perm +100 -name pandoc-crossref -exec cp {} ./ \;
+cabal new-install exe:pandoc exe:pandoc-crossref $CABAL_OPTS --overwrite-policy=always
+cp "$(realpath "$PANDOC_CROSSREF")" ./
 if [ -n "$RUN_UPX" ]; then
   upx --ultra-brute --best pandoc-crossref
 fi
