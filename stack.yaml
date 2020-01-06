@@ -1,22 +1,27 @@
 flags:
+  pandoc:
+    trypandoc: false
+    embed_data_files: true
+    static: false
   pandoc-crossref:
     enable_flaky_tests: true
-ghc-options:
-  $targets: -optl-fuse-ld=bfd
 packages:
 - .
 allow-newer: false
 extra-deps:
 - roman-numerals-0.5.1.5
-- pandoc-2.8
 - HsYAML-0.2.1.0
 - doclayout-0.2.0.1
-- doctemplates-0.7.1
+- doctemplates-0.8
 - haddock-library-1.8.0
-- skylighting-0.8.2.3
-- skylighting-core-0.8.2.3
+- skylighting-0.8.3
+- skylighting-core-0.8.3
 - texmath-0.12
 - pandoc-types-1.20
 - regex-pcre-builtin-0.95.1.1.8.43
 - regex-base-0.94.0.0
-resolver: lts-14.15
+- emojis-0.1
+- jira-wiki-markup-1.0.0
+- git: 'https://github.com/KMConner/pandoc'
+  commit: 72c8afa9ec91bee2e737176c13f3f452cdf2afeb
+resolver: lts-14.5
